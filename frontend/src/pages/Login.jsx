@@ -30,8 +30,12 @@ const Login = () => {
     setError(''); // Purana error hatao
 
     try {
+      // Construct API URL
+      const apiHost = import.meta.env.VITE_API_HOST;
+      const apiUrl = import.meta.env.VITE_API_URL || (apiHost ? `https://${apiHost}` : 'http://localhost:8080');
+
       // Backend ko call lagao
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/login`, {
+      const response = await axios.post(`${apiUrl}/user/login`, {
         phoneNumber: formData.phoneNumber,
         password: formData.password
       });
@@ -77,7 +81,7 @@ const Login = () => {
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none transition"
               // State se connect kiya
               value={formData.phoneNumber}
-              onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
               required
             />
           </div>
@@ -90,7 +94,7 @@ const Login = () => {
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none transition"
               // State se connect kiya
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>

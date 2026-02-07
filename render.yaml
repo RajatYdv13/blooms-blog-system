@@ -22,10 +22,10 @@ services:
         source: /*
         destination: /index.html
     envVars:
-      - key: VITE_API_URL
+      - key: VITE_API_HOST
         fromService:
           type: web
           name: blooms-backend
-          property: url
+          property: host
       - key: NODE_VERSION
         value: 20.11.0
