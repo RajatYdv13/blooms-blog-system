@@ -27,3 +27,5 @@ services:
           type: web
           name: blooms-backend
           property: url
+      - key: NODE_VERSION
+        value: 20.11.0
