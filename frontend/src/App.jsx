@@ -4,6 +4,9 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register'; // 👈 Import kiya
 
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+
 // Temporary Home Component (Jab tak asli wala na bane)
 const Home = () => (
   <div className="text-center mt-20">

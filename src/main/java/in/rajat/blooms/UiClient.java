@@ -5,17 +5,19 @@ import in.rajat.blooms.controller.SubCategoryController;
 import in.rajat.blooms.controller.UserController;
 import in.rajat.blooms.dto.*;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 public class UiClient {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("--- UI Client Started ---");
-        // 1. Controller (Waiter) ko bulaya
+
+        // Category Controller
         CategoryController categoryController = new CategoryController();
 
-        // 2. CREATE: Ek nayi Request banayi aur Controller ko di
         System.out.println("Step 1: Creating Categories...");
-
         CategoryRequest req1 = new CategoryRequest(
                 "Technology",
                 "All about Java and Coding",
@@ -30,86 +32,88 @@ public class UiClient {
         );
         categoryController.createCategory(req2);
 
-        // 3. READ: Ab Database se puchhte hain ki kya save hua?
         System.out.println("\nStep 2: Fetching All Categories...");
-
         List<CategoryResponse> categoryResponseList = categoryController.getCategories();
 
-        // 4. PRINT: Data ko screen pe dikhate hain
-        for(CategoryResponse cat : categoryResponseList){
+        for (CategoryResponse cat : categoryResponseList) {
             System.out.println("----------------------------");
             System.out.println("ID: " + cat.getId());
             System.out.println("Title: " + cat.getTitle());
             System.out.println("Description: " + cat.getDesc());
+            // FIXED getter name
             System.out.println("Image URL: " + cat.getcUrl());
             System.out.println("----------------------------");
-
         }
 
         CategoryController catController = new CategoryController();
-
-        // 1. Category banayi
         CategoryRequest catReq = new CategoryRequest("Technology", "Tech Stuff", "url");
         catController.createCategory(catReq);
-         NOTE: Real code mein hum createCategory se ID return karwate hain.
-         Lekin abhi hum assume karte hain ki list ki pehli category "Technology" hai.
+
         String techId = catController.getCategories().get(0).getId();
         System.out.println("Tech Category ID mil gayi: " + techId);
 
         SubCategoryController subController = new SubCategoryController();
         System.out.println("\n--- Creating SubCategories ---");
 
-        // Sahi ID ke saath (Ya Technology me jayega)
-        SubCategoryRequest javaReq = new SubCategoryRequest(techId,"Java","Core Java");
-        subController.createSubCategory(javaReq);
+        SubCategoryRequest javaReq = new SubCategoryRequest(techId, "Java", "Core Java");
+        SubCategoryResponse javaRes = subController.create(javaReq);
+        System.out.println("Created: " + javaRes.getName());
 
-        // Sahi ID ke saath (Ye bhi Technology me jayega)
         SubCategoryRequest pythonReq = new SubCategoryRequest(techId, "Python", "AI ML");
-        subController.createSubCategory(pythonReq);
-        // galat ID ke sath (Test Validation)
-        SubCategoryRequest errorReq = new SubCategoryRequest("9999","Alien Tech","Sci-Fi Stuff");
-        subController.createSubCategory(errorReq);
+        SubCategoryResponse pythonRes = subController.create(pythonReq);
+        System.out.println("Created: " + pythonRes.getName());
 
-        // 3. Ab Fetch karte hain(Filter Logic)
+        SubCategoryRequest errorReq = new SubCategoryRequest("9999", "Alien Tech", "Sci-Fi Stuff");
+        SubCategoryResponse errorRes = subController.create(errorReq);
+        System.out.println("Created: " + errorRes.getName());
+
         System.out.println("\n--- Fetching SubCategories for Technology ---");
-        List<SubCategoryResponse> techSub = subController.getSubCategoriesByCategoryId(techId);
+        List<SubCategoryResponse> techSub = subController.getCategory(techId);
 
-        for(SubCategoryResponse sub : techSub){
-            System.out.println("Found: "+sub.getName());
+        for (SubCategoryResponse sub : techSub) {
+            System.out.println("Found: " + sub.getName());
         }
-
-        // ... (Category code upar rehne do) ...
 
         System.out.println("\n--- TESTING USER MODULE ---");
         UserController userController = new UserController();
 
-        // 1. Register a New User
+        // Register a New User (6 args constructor)
         UserRequest user1 = new UserRequest(
                 "superadmin",
                 "admin@blooms.in",
                 "Super Admin",
-                "admin123", // Password
-                "avatar.png"
+                "Rajat@03",
+                "avatar.png",
+                "7004267042" // phone number required
         );
 
         String result = userController.registerUser(user1);
         System.out.println(result);
 
-        // 2. Try Registering duplicate (Validation Check)
+        // Try Registering duplicate (Validation Check)
         String result2 = userController.registerUser(user1);
         System.out.println("Duplicate Check: " + result2);
 
-        // 3. Login with WRONG password
+        // Login with WRONG password
         System.out.println("\n--- Trying Wrong Login ---");
-        userController.loginUser("superadmin", "wrongpass");
+        UserRequest wrongLogin = new UserRequest();
+        wrongLogin.setPhoneNumber("7004267042");
+        wrongLogin.setPassword("Rajat@03");
+        ResponseEntity<?> wrongResponse = userController.login(wrongLogin);
+        System.out.println("Login Response: " + wrongResponse.getBody());
 
-        // 4. Login with CORRECT password
+        // Login with CORRECT password
         System.out.println("\n--- Trying Correct Login ---");
-        UserResponse loggedInUser = userController.loginUser("superadmin", "admin123");
+        UserRequest correctLogin = new UserRequest();
+        correctLogin.setPhoneNumber("7004267042");
+        correctLogin.setPassword("Rajat@03");
+        ResponseEntity<?> loginResponse = userController.login(correctLogin);
 
-        if(loggedInUser != null) {
+        if (loginResponse.getStatusCode() == HttpStatus.OK) {
+            UserResponse loggedInUser = (UserResponse) loginResponse.getBody();
             System.out.println("Welcome Dashboard: " + loggedInUser.getName());
-            // NOTE: Future me hum is 'loggedInUser.getId()' ko use karenge Blog likhne ke liye
+        } else {
+            System.out.println("Login failed: " + loginResponse.getBody());
         }
     }
 }
