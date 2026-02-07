@@ -5,7 +5,6 @@ import in.rajat.blooms.models.Category;
 import in.rajat.blooms.models.SubCategory;
 import in.rajat.blooms.models.User;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +17,20 @@ public class Database {
     // 2. Private Constructor
     // Isse hum 'new Database()' ko block kar dete hain.
     // Koi bhi bahar se naya database nahi bana sakta.
-    private Database(){
+    private Database() {
     }
 
     // 3. Global Access Point (Security Guard)
     // Ye method check karta hai: "Kya database pehle se bana hai?"
     // Agar nahi, to banata hai. Agar haan, to wahi purana wala deta hai.
-    public static Database getInstance(){
-        if(instance == null){
+    public static Database getInstance() {
+        if (instance == null) {
             instance = new Database();
         }
         return instance;
     }
 
-    // ---  Data Storage (Lists) ---
+    // --- Data Storage (Lists) ---
     // 4. Categories ki List (Tech, Sports, etc.)
     private List<Category> categoryList = new ArrayList<>();
 
@@ -46,18 +45,19 @@ public class Database {
 
     // --- GETTERS (Data access karne ke liye) ---
 
-    public List<User> getUserList(){
+    public List<User> getUserList() {
         return userList;
     }
 
-    public List<Blog> getBlogList(){
+    public List<Blog> getBlogList() {
         return blogList;
     }
-    public List<Category> getCategoryList(){
+
+    public List<Category> getCategoryList() {
         return categoryList;
     }
 
-    public List<SubCategory> getSubCategoryList(){
+    public List<SubCategory> getSubCategoryList() {
         return subCategoryList;
     }
 
