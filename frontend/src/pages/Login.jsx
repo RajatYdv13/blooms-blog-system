@@ -31,7 +31,7 @@ const Login = () => {
 
     try {
       // Backend ko call lagao
-      const response = await axios.post('http://localhost:8080/user/login', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/login`, {
         phoneNumber: formData.phoneNumber,
         password: formData.password
       });

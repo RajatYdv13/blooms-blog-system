@@ -28,7 +28,7 @@ const Register = () => {
 
     try {
       // Backend Call
-      const response = await axios.post('http://localhost:8080/user/register', formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/register`, formData);
 
       console.log("Registration Success:", response.data);
       alert("🎉 Account Created! Please Login.");
