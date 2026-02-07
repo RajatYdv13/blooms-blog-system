@@ -21,15 +21,13 @@ public class UiClient {
         CategoryRequest req1 = new CategoryRequest(
                 "Technology",
                 "All about Java and Coding",
-                "https://tech-image.com/java.png"
-        );
+                "https://tech-image.com/java.png");
         categoryController.createCategory(req1);
 
         CategoryRequest req2 = new CategoryRequest(
                 "Health",
                 "Fitness and Diet Tips",
-                "https://health-image.com/yoga.png"
-        );
+                "https://health-image.com/yoga.png");
         categoryController.createCategory(req2);
 
         System.out.println("\nStep 2: Fetching All Categories...");
@@ -111,7 +109,9 @@ public class UiClient {
 
         if (loginResponse.getStatusCode() == HttpStatus.OK) {
             UserResponse loggedInUser = (UserResponse) loginResponse.getBody();
-            System.out.println("Welcome Dashboard: " + loggedInUser.getName());
+            if (loggedInUser != null) {
+                System.out.println("Welcome Dashboard: " + loggedInUser.getName());
+            }
         } else {
             System.out.println("Login failed: " + loginResponse.getBody());
         }
