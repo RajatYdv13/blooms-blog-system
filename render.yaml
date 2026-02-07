@@ -11,7 +11,7 @@ services:
       - key: PORT
         value: 8080
 
-  - type: static
+  - type: web
     name: blooms-frontend
     env: static
     buildCommand: npm install && npm run build
