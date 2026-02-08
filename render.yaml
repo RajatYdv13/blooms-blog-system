@@ -2,7 +2,6 @@ services:
   - type: web
     name: blooms-backend
     env: docker
-    plan: free
     dockerfilePath: ./Dockerfile
     envVars:
       - key: MONGO_URI
@@ -14,7 +13,6 @@ services:
   - type: web
     name: blooms-frontend
     env: static
-    plan: free
     buildCommand: npm run build
     staticPublishPath: build
     envVars:
