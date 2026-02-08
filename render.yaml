@@ -3,29 +3,20 @@ services:
     name: blooms-backend
     env: docker
     plan: free
-    dockerContext: .
-    healthCheckPath: /
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: MONGO_URI
-        sync: false
+        value: mongodb+srv://rajatkumaryadav68_db_user:<Yadav@786>@cluster0.59tplfv.mongodb.net/blooms?appName=Cluster0
       - key: PORT
         value: 8080
+    healthCheckPath: /
 
   - type: web
     name: blooms-frontend
     env: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    rootDir: frontend
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    plan: free
+    buildCommand: npm run build
+    staticPublishPath: build
     envVars:
-      - key: VITE_API_HOST
-        fromService:
-          type: web
-          name: blooms-backend
-          property: host
-      - key: NODE_VERSION
-        value: 20.11.0
+      - key: REACT_APP_API_URL
+        value: https://blooms-backend.onrender.com
