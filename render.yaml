@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: blooms-backend
+    env: java
+    plan: free
+    buildCommand: "./mvnw clean install -DskipTests"
+    startCommand: "java -jar target/*.jar"
+    healthCheckPath: /
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: PORT
+        value: 8080
