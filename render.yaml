@@ -5,9 +5,9 @@ services:
     plan: free
     buildCommand: "./mvnw clean install -DskipTests"
     startCommand: "java -jar target/*.jar"
-    healthCheckPath: /
+    healthCheckPath: /actuator/health
     envVars:
       - key: MONGO_URI
         sync: false
       - key: PORT
-        value: 8080
+        value: 10000
